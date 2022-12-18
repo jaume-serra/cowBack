@@ -1,6 +1,9 @@
-import {  Request, Response } from "express";
+import { Request, Response } from "express";
+import { ObjectId } from "mongodb";
+import { client } from "../db/index.js";
 
 export const getData = (req: Request, res: Response) => {
+  console.log("@GET getData");
   const date = new Date("2022/09/13");
   const parsedData = `${date.getFullYear().toString()}/${(
     date.getMonth() + 1
@@ -32,4 +35,24 @@ export const getData = (req: Request, res: Response) => {
       ],
     },
   ]);
+};
+
+export const getRamatsFromUser = async (req: Request, res: Response) => {
+  console.log("@GET getRamatsFromUser");
+  const userId = req.params.userId;
+  const user = await client
+    .db("CowProject")
+    .collection("users")
+    .findOne({ _id: new ObjectId(userId?.toString()) });
+  if (!user) return;
+  const ramats = await Promise.all(
+    user.ramatId?.map(async (ramatId: ObjectId) => {
+      console.log("ramatId :>> ", ramatId);
+      return client
+        .db("CowProject")
+        .collection("ramats")
+        .findOne({ _id: new ObjectId(ramatId?.toString()) });
+    })
+  );
+  res.json(ramats);
 };

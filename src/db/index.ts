@@ -7,7 +7,7 @@ const mongoUri = process.env.MONGO_URI || "";
 let dbConnection: any;
 let CowProject: any;
 
-const client = new MongoClient(mongoUri, {
+export const client = new MongoClient(mongoUri, {
   serverApi: ServerApiVersion.v1,
   //@ts-ignore
   useNewUrlParser: true,
