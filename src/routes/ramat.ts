@@ -1,8 +1,11 @@
 import express from "express";
 const ramatRoutes = express.Router();
-import { getData, getRamatsFromUser } from "../controllers/ramatController.js";
+import {
+  getCowsFromRamat,
+  getRamatsFromUser,
+} from "../controllers/ramatController.js";
 
 ramatRoutes.get("/:userId", getRamatsFromUser);
-ramatRoutes.get("/", getData);
+ramatRoutes.get("/cows/:ramatId", getCowsFromRamat);
 
 export default ramatRoutes;
