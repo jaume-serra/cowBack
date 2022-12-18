@@ -1,8 +1,8 @@
 import express from "express";
-const mainRouter = express.Router();
+const mainRoutes = express.Router();
 
-mainRouter.get("/", (req, res) => {
-  res.send("main/index");
+mainRoutes.get("/", (req, res) => {
+  res.json({ hello: "world" });
 });
 
-export default mainRouter;
+export default mainRoutes;

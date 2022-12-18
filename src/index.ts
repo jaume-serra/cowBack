@@ -1,13 +1,17 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import mainRouter from "./routes/main.js";
+import mainRoutes from "./routes/main.js";
+import ramatRoutes from "./routes/ramat.js";
+
 
 dotenv.config({ path: "./src/config/.env" });
 
 const app: Express = express();
 const port = process.env.PORT;
 
-app.use("/", mainRouter);
+app.use("/", mainRoutes);
+app.use("/ramat", ramatRoutes);
+
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
