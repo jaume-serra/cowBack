@@ -1,18 +1,17 @@
 import { Request, Response } from "express";
 import { client } from "../db/index.js";
 
-export const getUserIdByEmail = async (req: Request, res: Response) => {
-  const email = req.params.email;
-
+const getUserIdByEmail = async (email: string) => {
   const userId = await client
     .db("CowProject")
     .collection("users")
     .findOne({ email });
-  console.log("userId :>> ", userId);
-  return await res.json(userId?._id);
+  return await userId?._id;
 };
 
 export const getUserId = async (req: any, res: Response) => {
-  console.log("req.user :>> ", req.user);
-  return await res.json({ a: req.user });
+  const user = req.user;
+  const email = user.emailAddresses[0].emailAddress;
+  const userId = await getUserIdByEmail(email);
+  return await res.json({ user, email, userId });
 };

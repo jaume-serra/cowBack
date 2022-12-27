@@ -24,7 +24,6 @@ export const getRamatsFromUser = async (req: Request, res: Response) => {
 
   const ramats = await Promise.all(
     user.ramatId?.map(async (ramatId: ObjectId) => {
-      console.log("ramatId :>> ", ramatId);
       return client
         .db("CowProject")
         .collection("ramats")
