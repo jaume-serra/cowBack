@@ -7,7 +7,7 @@ import {
   getRamatsFromUser,
 } from "../controllers/ramatController.js";
 
-ramatRoutes.get("/:userId", verifyRequest, getRamatsFromUser);
-ramatRoutes.get("/cows/:ramatId", verifyRequest, getCowsFromRamat);
+ramatRoutes.get("/:userId", getRamatsFromUser);
+ramatRoutes.get("/cows/:ramatId", getCowsFromRamat);
 
 export default ramatRoutes;

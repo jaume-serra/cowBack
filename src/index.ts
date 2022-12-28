@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import dotenv from "dotenv";
 import mainRoutes from "./routes/main.js";
 import ramatRoutes from "./routes/ramat.js";
