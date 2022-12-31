@@ -3,6 +3,7 @@ import { client } from "../db/index.js";
 import { ObjectID } from "bson";
 import { convertStringToDate } from "../utils/convertStringToDate.js";
 import { convertXlsxToJson } from "../utils/convertXlsxToJson.js";
+import { ICow } from "../types/cow.js";
 
 export const loadDataFromCSV = async (req: any, res: Response) => {
   const ramatId = req.params.ramatId;
@@ -24,9 +25,20 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
           : convertStringToDate(cow["Data mort"]),
       alert: [],
       ramatId: new ObjectID("639f445393b71a13379e9787"),
+      type:
+        parseInt(cow["Edat, mesos"]) < 14
+          ? "calf"
+          : cow["Sexe"] == "Mascle"
+          ? "bull"
+          : "cow",
     };
   });
   await client.db("CowProject").collection("cows").insertMany(correctData);
-
+  await updateCowSonsFromImport(correctData);
   return res.json({ hola: correctData });
+};
+
+const updateCowSonsFromImport = async (data: Array<ICow>) => {
+  // Mirar si les mares són correctes i afegir a la taula la opcio Sons: Array[ VacaObject ]
+  await client.db("CowProject").collection("cows");
 };
