@@ -14,24 +14,22 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
     let rowObject = xlsx.utils.sheet_to_json(fileData.Sheets[sheetName]);
     resultData.push(rowObject);
   });
-  let correctData: any = [];
-  resultData[0].map((cow: any, index: number) => {
-    //TODO: Canviar aixo
-    correctData.push({
+  const correctData = resultData[0].map((cow: any, index: number) => {
+    return {
       identifier: cow["Identificador"],
       crotal: cow["4 digits"],
       age: cow["Edat, mesos"],
-      birthDate: cow["Data naixement"],
+      birthDate: new Date(cow["Data naixement"]),
       birthMO: cow["Explotació naixement"],
       birthCountry: cow["País de naixement"],
-      gender: cow["Sexe"],
+      gender: cow["Sexe"] == "Mascle" ? "M" : "F",
       race: cow["Raça"],
       deathDate: cow["Data mort"],
       alert: [],
       ramatId: new ObjectID("639f445393b71a13379e9787"),
-    });
+    };
   });
   await client.db("CowProject").collection("cows").insertMany(correctData);
 
-  return res.json({ hola: resultData });
+  return res.json({ hola: correctData });
 };
