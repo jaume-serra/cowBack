@@ -14,4 +14,5 @@ export interface ICow {
   race?: string;
   calf?: Array<{ calfId?: objectId; birth?: string; weaned?: boolean }>;
   type: "cow" | "calf" | "bull" | "calf_weaned" | "replacement_beef" | string;
+  motherIdentifier?: string;
 }

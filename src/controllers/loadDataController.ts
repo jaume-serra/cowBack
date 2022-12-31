@@ -31,6 +31,7 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
           : cow["Sexe"] == "Mascle"
           ? "bull"
           : "cow",
+      motherIdentifier: cow["Identificador mare"],
     };
   });
   await client.db("CowProject").collection("cows").insertMany(correctData);
@@ -40,5 +41,7 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
 
 const updateCowSonsFromImport = async (data: Array<ICow>) => {
   // Mirar si les mares són correctes i afegir a la taula la opcio Sons: Array[ VacaObject ]
-  await client.db("CowProject").collection("cows");
+  // const cowsData = await client.db("CowProject").collection("cows");
+  // data.filter((cow: ICow) => {
+  // });
 };
