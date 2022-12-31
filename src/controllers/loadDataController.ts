@@ -5,16 +5,13 @@ import { ObjectID } from "bson";
 export const loadDataFromCSV = async (req: any, res: Response) => {
   const ramatId = req.params.ramatId;
   const excelFile = req.file.path;
-  console.log("excelFile :>> ", excelFile);
-  console.log("ramatId :>> ", ramatId);
-
+  // console.log("excelFile :>> ", excelFile);
+  // console.log("ramatId :>> ", ramatId);
   const fileData = xlsx.readFile(excelFile, { type: "buffer" });
-  let resultData: any = [];
-  fileData.SheetNames.forEach((sheetName: any) => {
-    let rowObject = xlsx.utils.sheet_to_json(fileData.Sheets[sheetName]);
-    resultData.push(rowObject);
+  const resultData = fileData.SheetNames.map((sheetName: any) => {
+    return xlsx.utils.sheet_to_json(fileData.Sheets[sheetName]);
   });
-  const correctData = resultData[0].map((cow: any, index: number) => {
+  const correctData = resultData[0].map((cow: any) => {
     return {
       identifier: cow["Identificador"],
       crotal: cow["4 digits"],
