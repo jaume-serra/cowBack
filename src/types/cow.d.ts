@@ -12,7 +12,7 @@ export interface ICow {
   birthMO?: string;
   birthCountry?: string;
   race?: string;
-  calf?: Array<{ calfId?: objectId; birth?: string; weaned?: boolean }>;
+  sons?: Array<ICow>;
   type: "cow" | "calf" | "bull" | "calf_weaned" | "replacement_beef" | string;
-  motherIdentifier?: string;
+  motherIdentifier: string;
 }

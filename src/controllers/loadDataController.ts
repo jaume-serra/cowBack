@@ -24,6 +24,7 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
           ? undefined
           : convertStringToDate(cow["Data mort"]),
       alert: [],
+      sons: [],
       ramatId: new ObjectID("639f445393b71a13379e9787"),
       type:
         parseInt(cow["Edat, mesos"]) < 14
@@ -40,8 +41,26 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
 };
 
 const updateCowSonsFromImport = async (data: Array<ICow>) => {
-  // Mirar si les mares són correctes i afegir a la taula la opcio Sons: Array[ VacaObject ]
-  // const cowsData = await client.db("CowProject").collection("cows");
-  // data.filter((cow: ICow) => {
-  // });
+  await client
+    .db("CowProject")
+    .collection("cows")
+    .find({})
+    .forEach(function (doc) {
+      if (
+        doc.motherIdentifier &&
+        //@ts-ignore
+        client
+          .db("CowProject")
+          .collection("cows")
+          .findOne({ identifier: doc.motherIdentifier })
+      ) {
+        client
+          .db("CowProject")
+          .collection("cows")
+          .updateOne(
+            { identifier: doc.motherIdentifier },
+            { $push: { sons: doc } }
+          );
+      }
+    });
 };
