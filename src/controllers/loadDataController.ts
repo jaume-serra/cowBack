@@ -25,7 +25,7 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
           : convertStringToDate(cow["Data mort"]),
       alert: [],
       sons: [],
-      ramatId: new ObjectID("639f445393b71a13379e9787"),
+      ramatId: new ObjectID(ramatId),
       type:
         parseInt(cow["Edat, mesos"]) < 14
           ? "calf"
@@ -36,15 +36,15 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
     };
   });
   await client.db("CowProject").collection("cows").insertMany(correctData);
-  await updateCowSonsFromImport(correctData);
+  await updateCowSonsFromImport(ramatId);
   return res.json({ hola: correctData });
 };
 
-const updateCowSonsFromImport = async (data: Array<ICow>) => {
+const updateCowSonsFromImport = async (ramatId: string) => {
   await client
     .db("CowProject")
     .collection("cows")
-    .find({})
+    .find({ ramatId: ramatId })
     .forEach(function (doc) {
       if (
         doc.motherIdentifier &&
@@ -52,7 +52,7 @@ const updateCowSonsFromImport = async (data: Array<ICow>) => {
         client
           .db("CowProject")
           .collection("cows")
-          .findOne({ identifier: doc.motherIdentifier })
+          .findOne({ identifier: doc.motherIdentifier, ramatId: ramatId })
       ) {
         client
           .db("CowProject")
