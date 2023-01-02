@@ -15,4 +15,5 @@ export interface ICow {
   sons?: Array<ICow>;
   type: "cow" | "calf" | "bull" | "calf_weaned" | "replacement_beef" | string;
   motherIdentifier: string;
+  nextBirthDate: Date;
 }
