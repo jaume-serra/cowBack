@@ -57,10 +57,23 @@ const updateCowSonsFromImport = async (data: Array<ICow>) => {
         client
           .db("CowProject")
           .collection("cows")
-          .updateOne(
-            { identifier: doc.motherIdentifier },
-            { $push: { sons: doc } }
-          );
+          .findOne({ identifier: doc.motherIdentifier })
+          .then((mother: any) => {
+            if (
+              !mother?.sons ||
+              !mother?.sons.find(function (son: any) {
+                return son.identifier == doc.identifier;
+              })
+            ) {
+              client
+                .db("CowProject")
+                .collection("cows")
+                .updateOne(
+                  { identifier: doc.motherIdentifier },
+                  { $push: { sons: doc } }
+                );
+            }
+          });
       }
     });
 };
