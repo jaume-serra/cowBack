@@ -4,8 +4,9 @@ import mainRoutes from "./routes/main.js";
 import ramatRoutes from "./routes/ramat.js";
 import getDb from "./db/index.js";
 import userRoutes from "./routes/user.js";
-import loadData from "./routes/loadData.js";
+import loadDataRoutes from "./routes/loadData.js";
 import bodyParser from "body-parser";
+import cowRoutes from "./routes/cow.js";
 
 dotenv.config({ path: "./src/config/.env" });
 
@@ -21,7 +22,8 @@ app.use(
 app.use("/", mainRoutes);
 app.use("/ramat", ramatRoutes);
 app.use("/user", userRoutes);
-app.use("/load", loadData);
+app.use("/load", loadDataRoutes);
+app.use("/cow", cowRoutes);
 
 getDb().then(() => {
   app.listen(port, () => {
