@@ -7,11 +7,12 @@ export const s3 = new AWS.S3({
 
 export const uploadImageS3 = async (image: any) => {
   const fileStream = fs.createReadStream(image.path);
-  await s3
+  const result = await s3
     .upload({
       Bucket: "cowproject",
       Key: image.filename,
       Body: fileStream,
     })
     .promise();
+  return result.Location;
 };
