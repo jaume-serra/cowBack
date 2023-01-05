@@ -14,5 +14,5 @@ export const postUpdateImageCow = async (req: any, res: Response) => {
       { $set: { image_url: location } }
     );
   console.log("completed", req.file.originalname);
-  res.status(200).json({ succeded: true });
+  res.status(200).json({ succeded: true, location: location });
 };
