@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { uploadImageS3 } from "../services/s3.js";
+import { uploadImageS3, deleteImageS3 } from "../services/s3.js";
 import { ObjectId } from "mongodb";
 import { client } from "../db/index.js";
 
@@ -15,4 +15,17 @@ export const postUpdateImageCow = async (req: any, res: Response) => {
     );
   console.log("completed", req.file.originalname);
   res.status(200).json({ succeded: true, location: location });
+};
+
+export const postDeleteImageCow = async (req: any, res: Response) => {
+  if (!req.params.imageKey || !req.params.cowId) return;
+  await client
+    .db("CowProject")
+    .collection("cows")
+    .updateOne(
+      { _id: new ObjectId(req.params.cowId) },
+      { $unset: { image_url: "" } }
+    );
+  await deleteImageS3(req.params.imageKey);
+  res.status(200).json({ succeded: true });
 };

@@ -16,3 +16,11 @@ export const uploadImageS3 = async (image: any) => {
     .promise();
   return result.Location;
 };
+
+export const deleteImageS3 = async (imageKey: string) => {
+  const params = { Bucket: "cowproject", Key: imageKey };
+  await s3.deleteObject(params, (err, data) => {
+    if (err) console.log(err);
+    return data;
+  });
+};
