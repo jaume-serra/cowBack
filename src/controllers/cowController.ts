@@ -29,3 +29,9 @@ export const postDeleteImageCow = async (req: any, res: Response) => {
   await deleteImageS3(req.params.imageKey);
   res.status(200).json({ succeded: true });
 };
+
+
+export const postAddCow = async (req: any, res: Response) => {
+  res.status(200).json({ succeded: true })
+
+}
