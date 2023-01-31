@@ -70,7 +70,7 @@ export const postAddCow = async (req: any, res: Response) => {
         : gender == "Mascle"
         ? "bull"
         : "cow",
-    motherIdentifier: new ObjectId(motherCow._id),
+    motherIdentifier: motherCow.identifier,
   };
   // Create new animal
   const createdAnimal = 
@@ -80,7 +80,7 @@ export const postAddCow = async (req: any, res: Response) => {
     .insertOne(newAnimal)
 
   // Add animal to mother and update nextBirthDate
-  const result = await client 
+  await client 
     .db("CowProject")
     .collection("cows")
     .updateOne(
