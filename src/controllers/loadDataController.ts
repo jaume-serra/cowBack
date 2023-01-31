@@ -3,6 +3,7 @@ import { client } from "../db/index.js";
 import { ObjectID } from "bson";
 import { convertStringToDate } from "../utils/convertStringToDate.js";
 import { convertXlsxToJson } from "../utils/convertXlsxToJson.js";
+import { convertDateToMonth } from "../utils/convertDateToMonths.js";
 import { ICow } from "../types/cow.js";
 
 export const loadDataFromCSV = async (req: any, res: Response) => {
@@ -13,7 +14,6 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
     return {
       identifier: cow["Identificador"],
       crotal: cow["4 digits"],
-      age: cow["Edat, mesos"],
       birthDate: convertStringToDate(cow["Data naixement"]),
       birthMO: cow["Explotació naixement"],
       birthCountry: cow["País de naixement"],
@@ -23,11 +23,9 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
         cow["Data mort"] == " "
           ? undefined
           : convertStringToDate(cow["Data mort"]),
-      alert: [],
-      sons: [],
       ramatId: new ObjectID(ramatId),
       type:
-        parseInt(cow["Edat, mesos"]) < 14
+        convertDateToMonth(convertStringToDate(cow["Edat, mesos"])) < 14
           ? "calf"
           : cow["Sexe"] == "Mascle"
           ? "bull"
