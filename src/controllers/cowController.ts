@@ -2,8 +2,7 @@ import { Response } from "express";
 import { uploadImageS3, deleteImageS3 } from "../services/s3.js";
 import { ObjectId } from "mongodb";
 import { client } from "../db/index.js";
-import { convertStringToDate } from "../utils/convertStringToDate.js";
-import { convertDateToMonth } from "../utils/convertDateToMonths.js";
+import { convertStringToDate, convertDateToMonth } from "../utils/convertDates.js";
 
 export const postUpdateImageCow = async (req: any, res: Response) => {
   const location = await uploadImageS3(req.file);

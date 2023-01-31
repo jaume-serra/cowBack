@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { client } from "../db/index.js";
 import { ObjectID } from "bson";
-import { convertStringToDate } from "../utils/convertStringToDate.js";
+import { convertStringToDate, convertDateToMonth } from "../utils/convertDates.js";
 import { convertXlsxToJson } from "../utils/convertXlsxToJson.js";
-import { convertDateToMonth } from "../utils/convertDateToMonths.js";
 import { ICow } from "../types/cow.js";
 
 export const loadDataFromCSV = async (req: any, res: Response) => {
