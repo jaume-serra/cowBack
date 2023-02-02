@@ -34,14 +34,13 @@ export const postDeleteImageCow = async (req: any, res: Response) => {
 
 export const postAddCow = async (req: any, res: Response) => {
   const {identifier, motherCrotal, gender, breed, birthDate, ramatId} = req.body
-  // Check if mother exists 
-  const motherCow = await client
-    .db("CowProject")
-    .collection("cows")
-    .findOne({ ramatId: new ObjectId(ramatId?.toString()), crotal: motherCrotal })
- 
-  if(!motherCow || motherCow.type !== "cow" || motherCow.gender !== "F"){
-    return res.status(404).json({error: "La mare de l'animal és incorrecte. Comprova tots els camps."})
+  // Check if mother exists
+  let motherCow
+  if(motherCrotal) {
+    motherCow = await client
+      .db("CowProject")
+      .collection("cows")
+      .findOne({ ramatId: new ObjectId(ramatId?.toString()), crotal: motherCrotal })
   }
 
   //Check if animal already exists
@@ -69,7 +68,7 @@ export const postAddCow = async (req: any, res: Response) => {
         : gender == "Mascle"
         ? "bull"
         : "cow",
-    motherIdentifier: motherCow.identifier,
+    motherIdentifier: motherCow?.identifier,
   };
   // Create new animal
   const createdAnimal = 
@@ -79,16 +78,34 @@ export const postAddCow = async (req: any, res: Response) => {
     .insertOne(newAnimal)
 
   // Add animal to mother and update nextBirthDate
-  await client 
-    .db("CowProject")
-    .collection("cows")
-    .updateOne(
-      { _id: new ObjectId(motherCow._id) },
-      { 
-        $push: { sons: createdAnimal.insertedId }, 
-        $set: { nextBirthDate: new Date(birth.getTime() + 31536000000)} 
-      }
-    );
+  if(motherCow){
+    await client 
+      .db("CowProject")
+      .collection("cows")
+      .updateOne(
+        { _id: new ObjectId(motherCow._id) },
+        { 
+          $push: { sons: createdAnimal.insertedId }, 
+          $set: { nextBirthDate: new Date(birth.getTime() + 31536000000)} 
+        }
+      );
+  }
+  await createLogs(createdAnimal.insertedId, newAnimal.ramatId ,newAnimal.birthDate, motherCow?._id,)
   res.status(200).json({ succeded: true })
 
+}
+
+
+const createLogs = async (animalId: ObjectId, ramatId: ObjectId, birthDate: Date,  motherId?: ObjectId ) => {
+  //TODO:Revisar les dades que s'inserten
+  await client
+    .db("CowProject")
+    .collection("history_born")
+    .insertOne({
+      animalId,
+      ramatId,
+      date: birthDate,
+      "motherId": motherId ? motherId : null
+    })
+  console.log('animalId, motherId, ramatId, birtDate', animalId, motherId, ramatId, birthDate)
 }
