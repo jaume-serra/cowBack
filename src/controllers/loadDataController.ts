@@ -18,10 +18,6 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
       birthCountry: cow["País de naixement"],
       gender: cow["Sexe"] == "Mascle" ? "M" : "F",
       race: cow["Raça"],
-      deathDate:
-        cow["Data mort"] == " "
-          ? undefined
-          : convertStringToDate(cow["Data mort"]),
       ramatId: new ObjectID(ramatId),
       type:
         convertDateToMonth(convertStringToDate(cow["Edat, mesos"])) < 14
@@ -29,7 +25,7 @@ export const loadDataFromCSV = async (req: any, res: Response) => {
           : cow["Sexe"] == "Mascle"
           ? "bull"
           : "cow",
-      motherIdentifier: cow["Identificador mare"],
+      motherIdentifier: cow["Identificador mare"], //TODO: canviar a id de la mare
     };
   });
   await client.db("CowProject").collection("cows").insertMany(correctData);
