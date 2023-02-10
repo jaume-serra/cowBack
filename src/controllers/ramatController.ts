@@ -10,7 +10,10 @@ export const getCowsFromRamat = async (req: Request, res: Response) => {
     .collection("cows")
     .find({ ramatId: new ObjectId(ramatId?.toString()) })
     .toArray();
-  res.json(cows);
+  const filterCows = cows.filter((cow):any => {
+    return cow.death !== true
+  })
+  res.json(filterCows);
 };
 
 export const getRamatsFromUser = async (req: Request, res: Response) => {
