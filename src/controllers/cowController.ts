@@ -129,7 +129,7 @@ export const postDeleteCow = async (req: any, res: Response) => {
 export const postMoveCow = async (req: any, res: Response) => {
   const {checkedCows, destination , moveDate, ramatId} = req.body
   const cowsData = checkedCows.map((cow: {id:string, crotal:string}) => {
-    return {cow_id : new ObjectId(cow.id), destination, movedDate: new Date(moveDate)}
+    return {cow_id : new ObjectId(cow.id), destination: new ObjectId(destination), movedDate: new Date(moveDate)}
   })
   
   const cowsIds = checkedCows.map((cow: {id:string, crotal:string}) => {
