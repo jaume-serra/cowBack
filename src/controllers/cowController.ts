@@ -103,22 +103,59 @@ export const postDeleteCow = async (req: any, res: Response) => {
   const cowsIds = checkedCows.map((cow: {id:string, crotal:string}) => {
     return new ObjectId(cow.id)
   })
-
-  await client 
-  .db("CowProject")
-  .collection("history_dead")
-  .insertMany(cowsData);
-
-
-  await client 
-  .db("CowProject")
-  .collection("cows")
-  .updateMany(
-    { _id: {$in: cowsIds} },
-    { $set: {death: true}},
-    )
+  try{
+    await client 
+    .db("CowProject")
+    .collection("history_dead")
+    .insertMany(cowsData);
   
-  return res.status(200).json({ succeded: true })
+  
+    await client 
+    .db("CowProject")
+    .collection("cows")
+    .updateMany(
+      { _id: {$in: cowsIds} },
+      { $set: {death: true}},
+    )
+    return res.status(200).json({ succeded: true })
+
+  } catch(e: any) {
+    return res.status(404).json({'error': 'Error'})
+  }
+  
+
+}
+
+export const postMoveCow = async (req: any, res: Response) => {
+  const {checkedCows, destination , moveDate, ramatId} = req.body
+  const cowsData = checkedCows.map((cow: {id:string, crotal:string}) => {
+    return {cow_id : new ObjectId(cow.id), destination, movedDate: new Date(moveDate)}
+  })
+  
+  const cowsIds = checkedCows.map((cow: {id:string, crotal:string}) => {
+    return new ObjectId(cow.id)
+  })
+
+  try{
+    await client 
+    .db("CowProject")
+    .collection("history_moved")
+    .insertMany(cowsData);
+  
+    await client 
+    .db("CowProject")
+    .collection("cows")
+    .updateMany(
+      { _id: {$in: cowsIds} },
+      { $set: {ramatId: new ObjectId(destination)}},
+    )
+    return res.status(200).json({ succeded: true })
+
+  } catch(e:any) {
+    console.log('e', e)
+    return res.status(404).json({error: 'Error'})
+
+  }
 
 }
 
