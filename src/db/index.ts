@@ -1,7 +1,7 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import dotenv from "dotenv";
 
-dotenv.config({ path: "./src/config/.env" });
+dotenv.config({ path: "./.env" });
 const mongoUri = process.env.MONGO_URI || "";
 
 let dbConnection: any;

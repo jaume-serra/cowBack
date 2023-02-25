@@ -8,11 +8,10 @@ import loadDataRoutes from "./routes/loadData.js";
 import bodyParser from "body-parser";
 import cowRoutes from "./routes/cow.js";
 
-dotenv.config({ path: "./src/config/.env" });
+dotenv.config({ path: "./.env" });
 
 const app: Express = express();
 const port = process.env.PORT;
-
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
